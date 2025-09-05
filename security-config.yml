@@ -1,0 +1,70 @@
+# Security Configuration for Ticket System
+
+# OWASP Top 10 Security Checks
+owasp_checks:
+  - sql_injection
+  - broken_authentication
+  - sensitive_data_exposure
+  - xml_external_entities
+  - broken_access_control
+  - security_misconfiguration
+  - cross_site_scripting
+  - insecure_deserialization
+  - known_vulnerabilities
+  - insufficient_logging
+
+# File Upload Security
+file_upload:
+  allowed_types:
+    - image/jpeg
+    - image/png
+    - image/gif
+  max_size: 5242880  # 5MB
+  allowed_extensions:
+    - jpg
+    - jpeg
+    - png
+    - gif
+  scan_uploads: true
+  quarantine_suspicious: true
+
+# Authentication Security
+authentication:
+  password_min_length: 8
+  require_special_chars: true
+  require_numbers: true
+  require_uppercase: true
+  session_timeout: 3600  # 1 hour
+  max_login_attempts: 5
+  lockout_duration: 900  # 15 minutes
+
+# Database Security
+database:
+  use_prepared_statements: true
+  encrypt_sensitive_data: true
+  audit_logging: true
+  connection_timeout: 30
+
+# Security Headers
+security_headers:
+  x_frame_options: DENY
+  x_content_type_options: nosniff
+  x_xss_protection: "1; mode=block"
+  strict_transport_security: "max-age=31536000; includeSubDomains"
+  content_security_policy: "default-src 'self'"
+
+# Input Validation
+input_validation:
+  sanitize_html: true
+  validate_email: true
+  validate_url: true
+  max_input_length: 1000
+  block_sql_keywords: true
+
+# Logging
+security_logging:
+  log_failed_logins: true
+  log_sql_errors: true
+  log_file_uploads: true
+  log_admin_actions: true
+  log_security_events: true

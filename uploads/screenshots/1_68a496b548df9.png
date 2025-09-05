@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Utilisateur - Gestion des Incidents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: 'hsl(354, 98%, 44%)',
+                            foreground: 'hsl(0, 0%, 100%)',
+                            glow: 'hsl(354, 98%, 55%)'
+                        },
+                        background: 'hsl(0, 0%, 100%)',
+                        foreground: 'hsl(222.2, 84%, 4.9%)',
+                        card: 'hsl(0, 0%, 100%)',
+                        'card-foreground': 'hsl(222.2, 84%, 4.9%)',
+                        popover: 'hsl(0, 0%, 100%)',
+                        'popover-foreground': 'hsl(222.2, 84%, 4.9%)',
+                        secondary: 'hsl(210, 40%, 96.1%)',
+                        'secondary-foreground': 'hsl(222.2, 47.4%, 11.2%)',
+                        muted: 'hsl(210, 40%, 96.1%)',
+                        'muted-foreground': 'hsl(215.4, 16.3%, 46.9%)',
+                        accent: 'hsl(210, 40%, 96.1%)',
+                        'accent-foreground': 'hsl(222.2, 47.4%, 11.2%)',
+                        destructive: 'hsl(0, 84.2%, 60.2%)',
+                        'destructive-foreground': 'hsl(210, 40%, 98%)',
+                        border: 'hsl(214.3, 31.8%, 91.4%)',
+                        input: 'hsl(214.3, 31.8%, 91.4%)',
+                        ring: 'hsl(354, 98%, 44%)'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="icon" href="static/logo.png" type="image/png">
+</head>
+<body class="bg-background text-foreground">
+<div class="min-h-screen bg-background">
+    <!-- Header -->
+    <header class="border-b bg-card shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <img src="static/logo.png" 
+                     alt="CBG Logo" 
+                     class="w-16 h-12">
+                <div>
+                    <h1 class="text-2xl font-bold text-primary">Tableau de bord utilisateur</h1>
+                    <p class="text-muted-foreground">Gestion de vos tickets et transfert rapport</p>
+                </div>
+            </div>
+            <a href="auth/logout.php" 
+               class="flex items-center gap-2 px-4 py-2 border border-input rounded-md hover:bg-accent">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Déconnexion
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-card p-6 rounded-lg border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-muted-foreground text-sm">Total</p>
+                        <p class="text-2xl font-bold">0</p>
+                    </div>
+                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                </div>
+            </div>
+            
+                        
+            <div class="bg-card p-6 rounded-lg border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-muted-foreground text-sm">Ouverts</p>
+                        <p class="text-2xl font-bold">0</p>
+                    </div>
+                    <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-card p-6 rounded-lg border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-muted-foreground text-sm">En cours</p>
+                        <p class="text-2xl font-bold">0</p>
+                    </div>
+                    <svg class="w-8 h-8 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="bg-card p-6 rounded-lg border">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-muted-foreground text-sm">Résolus</p>
+                        <p class="text-2xl font-bold">0</p>
+                    </div>
+                    <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold">Mes tickets</h2>
+            <div class="flex gap-3">
+                <button onclick="captureScreen()" 
+                        class="bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Transfert Rapport
+                </button>
+                <button onclick="openNewTicketModal()" 
+                        class="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Nouveau ticket
+                </button>
+            </div>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="bg-card rounded-lg border overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-muted/50">
+                        <tr>
+                            <th class="text-left p-4 font-medium">Titre</th>
+                            <th class="text-left p-4 font-medium">Priorité</th>
+                            <th class="text-left p-4 font-medium">Statut</th>
+                            <th class="text-left p-4 font-medium">Date de création</th>
+                            <th class="text-left p-4 font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                                    <tr>
+                                <td colspan="5" class="text-center py-8 text-muted-foreground">
+                                    Aucun ticket trouvé. Créez votre premier ticket !
+                                </td>
+                            </tr>
+                                            </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nouveau Ticket -->
+<div id="newTicketModal" class="fixed inset-0 bg-black transition-opacity duration-300 ease-in-out hidden bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-card rounded-lg p-3 w-full max-w-md mx-4 transform transition-all duration-300 ease-in-out translate-y-4 opacity-0 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="text-base font-semibold">Nouveau ticket</h3>
+            <button onclick="closeNewTicketModal()" class="text-muted-foreground hover:text-foreground">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <form id="newTicketForm" class="space-y-2">
+            <div>
+                <label class="block text-sm font-medium mb-1">Titre</label>
+                <input type="text" name="title" required 
+                       class="w-full p-1.5 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Priorité</label>
+                <select name="priority" 
+                        class="w-full p-1.5 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm">
+                    <option value="low">Faible</option>
+                    <option value="medium" selected>Moyenne</option>
+                    <option value="high">Élevée</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Description</label>
+                <textarea name="description" required rows="2"
+                          class="w-full p-1.5 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm"></textarea>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Captures d'écran</label>
+                <div class="bg-muted/20 p-2 rounded-md text-xs mb-1">
+                    <kbd class="px-1 bg-muted rounded">Win+Shift+S</kbd> pour capturer, puis 
+                    <kbd class="px-1 bg-muted rounded">Ctrl+V</kbd> pour coller
+                </div>
+                <div id="screenshotPreview" class="grid grid-cols-2 gap-2 mb-1">
+                    <!-- Screenshots will be added here -->
+                </div>
+                <input type="hidden" name="screenshots[]" id="screenshotInput">
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button type="submit" 
+                        class="flex-1 bg-primary text-primary-foreground px-3 py-1.5 rounded-md hover:bg-primary/90 text-sm">
+                    Créer le ticket
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Capture d'écran -->
+<div id="screenshotModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-card rounded-lg p-6 w-full max-w-md mx-4">
+        <h3 class="text-lg font-semibold mb-4">Capture d'écran - Transfert Rapport</h3>
+        <div class="mb-4">
+            <label class="block text-sm font-medium mb-2">Description</label>
+            <textarea id="screenshotDescription" rows="3" 
+                      placeholder="Décrivez le contenu de la capture..."
+                      class="w-full p-3 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring"></textarea>
+        </div>
+        <div class="flex gap-3">
+            <button type="button" onclick="closeScreenshotModal()" 
+                    class="flex-1 px-4 py-2 border border-input rounded-md hover:bg-accent">
+                Annuler
+            </button>
+            <button onclick="takeScreenshot()" 
+                    class="flex-1 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90">
+                Capturer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openNewTicketModal() {
+    const modal = document.getElementById('newTicketModal');
+    const modalContent = modal.querySelector('.bg-card');
+    modal.classList.remove('hidden');
+    // Force reflow
+    void modal.offsetWidth;
+    modalContent.classList.remove('translate-y-4', 'opacity-0');
+}
+
+function closeNewTicketModal() {
+    const modal = document.getElementById('newTicketModal');
+    const modalContent = modal.querySelector('.bg-card');
+    modalContent.classList.add('translate-y-4', 'opacity-0');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('newTicketForm').reset();
+    }, 300);
+}
+
+function viewTicket(ticketId) {
+    window.location.href = `ticket_details.php?id=${ticketId}`;
+}
+
+document.getElementById('newTicketForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const screenshots = document.querySelectorAll('input[name="screenshots[]"]');
+    
+    // Remove existing screenshots from FormData
+    formData.delete('screenshots[]');
+    
+    // Add each screenshot as a separate file
+    for (let i = 0; i < screenshots.length; i++) {
+        const response = await fetch(screenshots[i].value);
+        const blob = await response.blob();
+        formData.append('screenshots[]', blob, `screenshot_${i}.png`);
+    }
+    
+    try {
+        const response = await fetch('api/tickets.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            location.reload();
+        } else {
+            alert('Erreur: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erreur lors de la création du ticket');
+    }
+});
+
+// Gestion des captures d'écran
+function captureScreen() {
+    document.getElementById('screenshotModal').classList.remove('hidden');
+}
+
+function closeScreenshotModal() {
+    document.getElementById('screenshotModal').classList.add('hidden');
+    document.getElementById('screenshotDescription').value = '';
+}
+
+async function takeScreenshot() {
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: { mediaSource: 'screen' }
+        });
+        
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
+        
+        video.addEventListener('loadedmetadata', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            stream.getTracks().forEach(track => track.stop());
+            
+            const imageData = canvas.toDataURL('image/png');
+            const description = document.getElementById('screenshotDescription').value;
+            
+            saveScreenshot(imageData, description);
+        });
+        
+    } catch (error) {
+        alert('Erreur lors de la capture d\'écran: ' + error.message);
+        closeScreenshotModal();
+    }
+}
+
+async function saveScreenshot(imageData, description) {
+    try {
+        // Convert base64 to blob
+        const fetchResponse = await fetch(imageData);
+        const blob = await fetchResponse.blob();
+        
+        const formData = new FormData();
+        formData.append('screenshot', blob, 'screenshot.png');
+        formData.append('description', description);
+        
+        const response = await fetch('api/screenshot.php', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            closeScreenshotModal();
+            // Show success notification
+            const preview = document.createElement('div');
+            preview.className = 'fixed bottom-4 right-4 bg-green-100 text-green-800 p-4 rounded-lg shadow-lg z-50';
+            preview.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span>Capture d'écran sauvegardée</span>
+                </div>
+            `;
+            document.body.appendChild(preview);
+            setTimeout(() => preview.remove(), 3000);
+        } else {
+            throw new Error(result.message);
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('Erreur lors de la sauvegarde de la capture: ' + error.message);
+    }
+}
+
+document.addEventListener('paste', function(event) {
+    const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    
+    for (let item of items) {
+        if (item.type.indexOf('image') === 0) {
+            const blob = item.getAsFile();
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const preview = document.getElementById('screenshotPreview');
+                const container = document.createElement('div');
+                container.className = 'relative';
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-full h-32 object-cover rounded-md';
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600';
+                removeBtn.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+                removeBtn.onclick = function() {
+                    container.remove();
+                };
+                
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
+                
+                // Store base64 data in hidden input
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'screenshots[]';
+                input.value = e.target.result;
+                container.appendChild(input);
+            };
+            
+            reader.readAsDataURL(blob);
+        }
+    }
+});
+</script>
+
+</body>
+</html>

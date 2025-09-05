@@ -1,0 +1,29 @@
+parameters:
+    level: 8
+    paths:
+        - .
+    excludePaths:
+        - vendor/
+        - uploads/
+        - static/
+        - .phpstan-tmp/
+    ignoreErrors:
+        - '#Call to an undefined method#'
+        - '#Access to an undefined property#'
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
+    tmpDir: .phpstan-tmp
+    parallel:
+        processTimeout: 300.0
+    bootstrapFiles:
+        - vendor/autoload.php
+    rules:
+        - PHPStan\Rules\Security\EvalRule
+        - PHPStan\Rules\Security\FileUploadsRule
+        - PHPStan\Rules\Security\ForbiddenSuperglobalRule
+        - PHPStan\Rules\Security\ForbiddenVariableRule
+        - PHPStan\Rules\Security\ShellExecRule
+        - PHPStan\Rules\Security\UnserializeRule
+    errorFormat: table
+    memoryLimitFile: 2G
